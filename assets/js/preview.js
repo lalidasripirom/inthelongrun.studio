@@ -23,6 +23,9 @@
   const hint = document.getElementById("order-hint");
 
   const state = { swapped: false, font: tpl.fonts[0] };
+  let version = 0; // เพิ่มทุกครั้งที่ชื่อ/ฟอนต์เปลี่ยน ใช้เช็กว่าภาพที่เตรียมไว้ยังตรงกับหน้าจอ
+  let prepared = null;
+  let prepareTimer;
 
   /* ---------- ข้อมูลแบบการ์ด ---------- */
   document.title = `${tpl.nameTh} — ลองใส่ชื่อ | ${window.SHOP.name}`;
@@ -95,6 +98,8 @@
     fontBox.querySelectorAll("input").forEach((r) => (r.checked = r.value === state.font));
     fit();
     persist();
+    version++;
+    schedulePrepare();
   }
 
   // ย่อขนาดตัวอักษรอัตโนมัติถ้าชื่อยาวเกินพื้นที่
@@ -130,6 +135,7 @@
   img.addEventListener("load", fit);
   document.fonts.ready.then(fit);
   document.fonts.addEventListener("loadingdone", fit);
+  document.fonts.ready.then(schedulePrepare);
   render();
 
   /* ---------- บันทึกภาพตัวอย่าง (มีลายน้ำ) ---------- */
@@ -186,15 +192,69 @@
     return canvas;
   }
 
+  async function makeBlob() {
+    const canvas = await renderToCanvas();
+    return new Promise((r) => canvas.toBlob(r, "image/jpeg", 0.9));
+  }
+
+  // เตรียมภาพไว้ก่อนลูกค้ากดปุ่ม — iPhone อนุญาตให้เปิดหน้าแชร์ได้เฉพาะทันทีหลังกด ถ้ารอวาดภาพนานเกินจะถูกบล็อก
+  function schedulePrepare() {
+    clearTimeout(prepareTimer);
+    prepareTimer = setTimeout(async () => {
+      const v = version;
+      const blob = await makeBlob();
+      if (v === version) prepared = { version: v, blob };
+    }, 500);
+  }
+
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  // เบราว์เซอร์ในแอป LINE / Facebook / Instagram / TikTok มักไม่รองรับการดาวน์โหลดไฟล์
+  const isInApp = /\bLine\/|FBAN|FBAV|Instagram|TikTok/i.test(ua);
+
+  const sheet = document.getElementById("save-sheet");
+  const sheetImg = document.getElementById("save-sheet-img");
+  function showSaveSheet(blob) {
+    if (sheetImg.src) URL.revokeObjectURL(sheetImg.src);
+    sheetImg.src = URL.createObjectURL(blob);
+    sheet.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  function hideSaveSheet() {
+    sheet.hidden = true;
+    document.body.style.overflow = "";
+  }
+  sheet.addEventListener("click", (e) => {
+    if (e.target === sheet || e.target.closest("[data-close]")) hideSaveSheet();
+  });
+
   document.getElementById("save-btn").addEventListener("click", async (e) => {
     const btn = e.currentTarget;
     btn.disabled = true;
     try {
-      const canvas = await renderToCanvas();
-      const blob = await new Promise((r) => canvas.toBlob(r, "image/jpeg", 0.9));
+      const blob = prepared && prepared.version === version ? prepared.blob : await makeBlob();
+      const filename = `${tpl.id}-sample.jpg`;
+
+      // iPhone: เปิดหน้าแชร์ ซึ่งมีปุ่ม "บันทึกภาพ" ลงแอปรูปภาพ (ลิงก์ดาวน์โหลดจะไปอยู่ในแอปไฟล์แทน)
+      if (isIOS) {
+        const file = new File([blob], filename, { type: "image/jpeg" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file] });
+            return;
+          } catch (err) {
+            if (err.name === "AbortError") return; // ลูกค้ากดปิดหน้าแชร์เอง
+          }
+        }
+      }
+      if (isIOS || isInApp) {
+        showSaveSheet(blob);
+        return;
+      }
+
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `${tpl.id}-ตัวอย่าง.jpg`;
+      a.download = filename;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     } finally {
