@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ลองใส่ชื่อบนการ์ด — inthelongrun.studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Charm:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./" aria-label="inthelongrun.studio">
+        <span class="brand-script">inthelongrun</span><span class="brand-caps">.studio</span>
+      </a>
+      <nav class="nav">
+        <a href="./#catalog">แบบการ์ด</a>
+        <a class="nav-cta" data-shop="line" href="#">ติดต่อทาง LINE</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container preview-page">
+    <a class="back-link" href="./#catalog">← กลับไปดูแบบทั้งหมด</a>
+
+    <div class="not-found" id="not-found" hidden>
+      <h1>ไม่พบแบบการ์ดนี้</h1>
+      <p><a href="./#catalog">กลับไปเลือกแบบการ์ด</a></p>
+    </div>
+
+    <div class="preview-layout" id="preview" hidden>
+      <div class="stage-wrap">
+        <div class="stage" id="stage">
+          <img id="card-image" alt="">
+          <div class="slot" data-slot="0"><span></span></div>
+          <div class="slot" data-slot="1"><span></span></div>
+        </div>
+        <p class="stage-note">ภาพจำลองเพื่อดูตัวอย่างเท่านั้น สีและตำแหน่งบนการ์ดจริงอาจต่างเล็กน้อย</p>
+        <div class="debug-panel" id="debug-panel" hidden>
+          <strong>โหมดปรับตำแหน่ง</strong> — คลิกบนรูปเพื่อดูพิกัด
+          <code id="debug-out">x: –, y: –</code>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <p class="eyebrow" id="card-name-en"></p>
+        <h1 id="card-name"></h1>
+        <p class="price" id="card-price"></p>
+        <p class="desc" id="card-desc"></p>
+        <ul class="tags" id="card-tags"></ul>
+
+        <form class="name-form" id="name-form" autocomplete="off">
+          <div class="field">
+            <label for="name-0" id="label-0">ชื่อเจ้าบ่าว</label>
+            <input id="name-0" type="text" maxlength="40" placeholder="เช่น Somchai หรือ สมชาย">
+          </div>
+
+          <button type="button" class="swap-btn" id="swap-btn" title="สลับตำแหน่งชื่อ">
+            <span aria-hidden="true">⇅</span> สลับตำแหน่ง
+          </button>
+
+          <div class="field">
+            <label for="name-1" id="label-1">ชื่อเจ้าสาว</label>
+            <input id="name-1" type="text" maxlength="40" placeholder="เช่น Somying หรือ สมหญิง">
+          </div>
+
+          <fieldset class="field">
+            <legend>รูปแบบตัวอักษร</legend>
+            <div class="font-options" id="font-options"></div>
+          </fieldset>
+        </form>
+
+        <div class="actions">
+          <button type="button" class="btn btn-outline" id="save-btn">บันทึกภาพตัวอย่าง</button>
+          <button type="button" class="btn btn-primary" id="order-btn">สั่งซื้อแบบนี้</button>
+        </div>
+        <p class="hint" id="order-hint" aria-live="polite"></p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><span data-shop="name">inthelongrun.studio</span> · <a data-shop="line" href="#">ติดต่อทาง LINE</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/templates.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/preview.js"></script>
+</body>
+</html>

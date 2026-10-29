@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>เพิ่มเพื่อนทาง LINE — inthelongrun.studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@400;500&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./" aria-label="inthelongrun.studio">
+        <span class="brand-script">inthelongrun</span><span class="brand-caps">.studio</span>
+      </a>
+      <nav class="nav">
+        <a href="./#catalog">แบบการ์ด</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container line-page">
+    <div class="line-card">
+      <div class="brand brand-logo" aria-label="inthelongrun.studio">
+        <span class="brand-script">inthelongrun</span><span class="brand-caps">.studio</span>
+      </div>
+
+      <p class="line-welcome">🤍 ยินดีต้อนรับสู่ inthelongrun ค่ะ<br>ทักมาได้เลย ทางร้านจะรีบติดต่อกลับให้เร็วที่สุดค่ะ</p>
+      <p class="line-copied" id="line-copied" hidden>รายละเอียดการ์ดถูกคัดลอกไว้แล้ว วางในแชทได้เลยค่ะ</p>
+
+      <img class="line-qr" src="assets/line-qr.jpg" width="900" height="900" alt="QR code สำหรับเพิ่มเพื่อน LINE ของร้าน inthelongrun">
+      <p class="line-caption">
+        <span lang="en">Scan QR code to add friend</span>
+        <span>สแกน QR code เพื่อเพิ่มเพื่อนใน LINE</span>
+      </p>
+
+      <a class="btn btn-line" data-shop="line-app" href="#">เพิ่มเพื่อน / แชทกับร้านใน LINE</a>
+      <p class="line-note">ใช้มือถือ? กดปุ่มด้านบนเพื่อเปิดแอป LINE ได้ทันที</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><span data-shop="name">inthelongrun.studio</span></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/templates.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script>
+    if (new URLSearchParams(location.search).has("order")) {
+      document.getElementById("line-copied").hidden = false;
+    }
+  </script>
+</body>
+</html>
